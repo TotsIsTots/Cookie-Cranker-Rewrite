@@ -1,22 +1,22 @@
-import "dvd" -- DEMO
-local dvd = dvd(1, -1) -- DEMO
+import "player"
+local player = player(100, 100, 5, 1)
 
 local gfx <const> = playdate.graphics
-local font = gfx.font.new('font/Mini Sans 2X') -- DEMO
+local font = gfx.font.new('font/Mini Sans 2X')
 
 local function loadGame()
 	playdate.display.setRefreshRate(50) -- Sets framerate to 50 fps
 	math.randomseed(playdate.getSecondsSinceEpoch()) -- seed for math.random
-	gfx.setFont(font) -- DEMO
+	gfx.setFont(font)
 end
 
 local function updateGame()
-	dvd:update() -- DEMO
+	gfx.sprite.update()
+	player:update()
 end
 
 local function drawGame()
-	gfx.clear() -- Clears the screen
-	dvd:draw() -- DEMO
+
 end
 
 loadGame()

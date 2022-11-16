@@ -15,13 +15,14 @@ if (!$dontbuild)
 # Clean build folder
 if (!$dontbuild)
 {
-    Remove-Item "$build\*" -Recurse -Force 
+    Get-ChildItem -Path $build -Include *.* -File -Recurse | foreach { $_.Delete()}
 }
 
 # Build
 if (!$dontbuild)
 {
     pdc -sdkpath "$Env:PLAYDATE_SDK_PATH" "$source" "$pdx"
+    #Compress-Archive -LiteralPath .\builds\CookieCranker.pdx -DestinationPath .\builds\CookieCranker.pdx.zip
 }
 
 # Close Simulator
