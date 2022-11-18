@@ -8,6 +8,8 @@ class("player").extends()
 function player:init(x, y, --[[optional]]maxSpeed, --[[optional]]acceleration)
   self.x = x
   self.y = y
+  self.offx = 0
+  self.offy = 0
   self.dir = 0
   self.maxSpeed = maxSpeed or 1
   self.xvel = 0
@@ -96,7 +98,7 @@ function player:move()
   self.x += self.xvel
   self.y -= self.yvel
   
-  self.sprite:moveTo(self.x, self.y)
+  self.sprite:moveTo(self.x + self.offx, self.y + self.offy)
 end
 
 function player:update()
