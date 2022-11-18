@@ -5,7 +5,9 @@ local gfx <const> = pd.graphics
 
 class("player").extends()
 
-function player:init(x, y, --[[optional]]maxSpeed, --[[optional]]acceleration)
+function player:init(x, y, level, --[[optional]]maxSpeed, --[[optional]]acceleration)
+  self.level = level
+
   self.x = x
   self.y = y
   self.offx = 0
@@ -16,6 +18,8 @@ function player:init(x, y, --[[optional]]maxSpeed, --[[optional]]acceleration)
   self.yvel = 0
   self.accel = acceleration or 0.5
   self.image = gfx.image.new("images/player.png")
+  self.hitbox = gfx.image.new("images/playerhitbox.png")
+  self.width, self.height = self.image:getSize()
   self.sprite = gfx.sprite.new(self.image)
   self.sprite:moveTo(self.x, self.y)
   self.sprite:add()
@@ -94,7 +98,12 @@ function player:move()
       end
     end
   end
-  
+  if gfx.checkAlphaCollision(self.hitbox, self.x + self.xvel - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x, self.level.y, gfx.kImageUnflipped) then
+    self.xvel = 0
+  end
+  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - self.yvel - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x, self.level.y, gfx.kImageUnflipped) then
+    self.yvel = 0
+  end
   self.x += self.xvel
   self.y -= self.yvel
   

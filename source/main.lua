@@ -1,12 +1,11 @@
 import "player"
 import "weapons/item"
-import "level"
+import "levels/level"
 import "camera"
--- import "weapons/*"
 
-local player = player(200, 120, 5, 1)
+local level = level(-200, -200, "images/leveltest.png", "images/leveltesthitbox.png")
+local player = player(0, 0, level, 5, 1)
 local knife = item(player, "knife", "images/knife.png")
-local level = level(0, -80, "images/level.png")
 local camera = camera("object", player)
 
 local pd <const> = playdate

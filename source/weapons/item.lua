@@ -9,7 +9,6 @@ function item:init(user, name, image)
   self.user = user
   self.name = name
   self.OGimage = gfx.image.new(image)
-  -- make self.image, an array with a key of every even number 0 to 358
   self.image = {}
   for deg = 0, 358, 2 do
     self.image[deg] = self.OGimage:rotatedImage(deg)
