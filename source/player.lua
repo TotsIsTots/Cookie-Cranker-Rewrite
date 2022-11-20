@@ -10,8 +10,6 @@ function player:init(x, y, level, --[[optional]]maxSpeed, --[[optional]]accelera
 
   self.x = x
   self.y = y
-  self.offx = 0
-  self.offy = 0
   self.dir = 0
   self.maxSpeed = maxSpeed or 1
   self.xvel = 0
@@ -98,16 +96,26 @@ function player:move()
       end
     end
   end
-  if gfx.checkAlphaCollision(self.hitbox, self.x + self.xvel - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x, self.level.y, gfx.kImageUnflipped) then
+  if gfx.checkAlphaCollision(self.hitbox, self.x + self.xvel - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
     self.xvel = 0
   end
-  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - self.yvel - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x, self.level.y, gfx.kImageUnflipped) then
+  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - self.yvel - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
     self.yvel = 0
   end
   self.x += self.xvel
   self.y -= self.yvel
   
-  self.sprite:moveTo(self.x + self.offx, self.y + self.offy)
+  self.sprite:moveTo(self.x, self.y)
+
+  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
+    self.x -= self.xvel
+    self.y += self.yvel
+    self.sprite:moveTo(self.x, self.y)
+    self.xvel = 0
+    self.yvel = 0
+
+  end
+
 end
 
 function player:update()
