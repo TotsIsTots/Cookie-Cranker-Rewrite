@@ -28,7 +28,7 @@ local function updateGame()
 	player:update()
 	knife:update()
 	if pd.buttonIsPressed("a") then
-		camera:setTarget("position", {200, 120})
+		camera:setTarget("position", {0, 0})
 	end
 	if pd.buttonIsPressed("b") then
 		camera:setTarget("object", player)
