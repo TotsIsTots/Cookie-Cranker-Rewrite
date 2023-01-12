@@ -1,12 +1,18 @@
 import "player"
+import "enemies/enemy"
 import "weapons/item"
+import "weapons/salkowski/salkowski"
+import "weapons/big_iron/big_iron"
 import "levels/level"
 import "camera"
 
-local level = level(0, 0, "images/leveltest.png", "images/leveltesthitbox.png")
-local player = player(0, 0, level, 5, 1)
-local knife = item(player, "knife", "images/knife.png")
+-- local level = level(0, 0, "levels/leveltest/leveltest.png", "levels/leveltest/leveltesthitbox.png")
+local level = leveltest()
+player = player(0, 100, level, 5, 1)
+local weapon = big_iron(player)
+print(weapon.isa(item))
 local camera = camera("object", player)
+level:spawnEnemies()
 
 local pd <const> = playdate
 local gfx <const> = pd.graphics
@@ -18,7 +24,6 @@ local function loadGame()
 	gfx.setFont(font)
 
 	camera:setLimit(level.x - (level.width / 2), level.x + (level.width / 2), level.y - (level.height / 2), level.y + (level.height / 2))
-	-- camera:setLimit(0, 0, -80, 80)
 
 end
 
@@ -26,7 +31,7 @@ local function updateGame()
 	camera:update()
 	gfx.setDrawOffset(-camera.x + 200, -camera.y + 120)
 	player:update()
-	knife:update()
+	weapon:update()
 	if pd.buttonIsPressed("a") then
 		camera:setTarget("position", {0, 0})
 	end
@@ -35,10 +40,12 @@ local function updateGame()
 	end
 	
 	gfx.sprite.update()
+	levels.update()
+	pd.frameTimer.updateTimers()
+	projectiles.update(1)
 end
 
 local function drawGame()
-	level:draw()
 end
 
 loadGame()

@@ -11,7 +11,7 @@ function player:init(x, y, level, --[[optional]]maxSpeed, --[[optional]]accelera
   self.x = x
   self.y = y
   self.dir = 0
-  self.maxSpeed = maxSpeed or 1
+  self.maxSpeed = maxSpeed or 5
   self.xvel = 0
   self.yvel = 0
   self.accel = acceleration or 0.5
@@ -21,6 +21,8 @@ function player:init(x, y, level, --[[optional]]maxSpeed, --[[optional]]accelera
   self.sprite = gfx.sprite.new(self.image)
   self.sprite:moveTo(self.x, self.y)
   self.sprite:add()
+
+  self.health = 10
 end
 
 
@@ -63,8 +65,8 @@ function player:move()
   -- move player
   if moving then
     -- accelerate to maxSpeed
-    self.xvel = self.xvel + math.cos(self.dir) * self.accel
-    self.yvel = self.yvel + math.sin(self.dir) * self.accel
+    self.xvel += math.cos(self.dir) * self.accel
+    self.yvel += math.sin(self.dir) * self.accel
     local speed = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
     if speed > self.maxSpeed then
       self.xvel = self.xvel / speed * self.maxSpeed
@@ -96,10 +98,16 @@ function player:move()
       end
     end
   end
-  if gfx.checkAlphaCollision(self.hitbox, self.x + self.xvel - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
+  if gfx.checkAlphaCollision
+  (self.hitbox, self.x + self.xvel - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, 
+  self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped)
+  then
     self.xvel = 0
   end
-  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - self.yvel - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
+  if gfx.checkAlphaCollision
+  (self.hitbox, self.x - (self.width / 2), self.y - self.yvel - (self.height / 2), gfx.kImageUnflipped, 
+  self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped)
+  then
     self.yvel = 0
   end
   self.x += self.xvel
@@ -107,15 +115,25 @@ function player:move()
   
   self.sprite:moveTo(self.x, self.y)
 
-  if gfx.checkAlphaCollision(self.hitbox, self.x - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) then
+  if gfx.checkAlphaCollision
+  (self.hitbox, self.x - (self.width / 2), self.y - (self.height / 2), gfx.kImageUnflipped, 
+  self.level.hitbox, self.level.x - (self.level.width / 2), self.level.y - (self.level.height / 2), gfx.kImageUnflipped) 
+  then
     self.x -= self.xvel
     self.y += self.yvel
     self.sprite:moveTo(self.x, self.y)
     self.xvel = 0
     self.yvel = 0
-
   end
 
+end
+
+function player:takeDamage(damage, dir, knockback)
+  self.health -= damage
+  if dir ~= nil then
+    self.xvel += math.cos(dir) * (knockback or 3)
+    self.yvel += math.sin(dir) * (knockback or 3)
+  end
 end
 
 function player:update()
